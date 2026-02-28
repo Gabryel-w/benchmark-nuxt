@@ -1,0 +1,37 @@
+# Nuxt
+.nuxt
+dist
+.output
+
+# Node
+node_modules
+*.pnp
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Build outputs
+build/
+out/
+
+# Prisma
+prisma/migrations
