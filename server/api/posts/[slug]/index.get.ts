@@ -5,18 +5,30 @@ export default defineEventHandler(async (event): Promise<SinglePostResponse> => 
   const prisma = getPrismaClient()
 
   try {
-    const slug = getRouterParam(event, 'slug')
+    const slugOrId = getRouterParam(event, 'slug')
 
-    if (!slug) {
+    if (!slugOrId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Slug parameter is required'
+        statusMessage: 'Slug or ID parameter is required'
       })
     }
 
-    const post = await prisma.post.findUnique({
-      where: { slug }
-    })
+    // Try to parse as number (ID)
+    const id = parseInt(slugOrId, 10)
+    let post
+
+    if (!isNaN(id) && id > 0) {
+      // It's an ID
+      post = await prisma.post.findUnique({
+        where: { id }
+      })
+    } else {
+      // It's a slug
+      post = await prisma.post.findUnique({
+        where: { slug: slugOrId }
+      })
+    }
 
     if (!post) {
       throw createError({

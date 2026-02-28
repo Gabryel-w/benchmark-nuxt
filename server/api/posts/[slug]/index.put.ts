@@ -1,5 +1,5 @@
 import { getPrismaClient } from '~/server/utils/prisma'
-import type { UpdatePostRequest } from '~/types'
+import type { PostUpdateInput } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const prisma = getPrismaClient()
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const body = await readBody<UpdatePostRequest>(event)
+    const body = await readBody<PostUpdateInput>(event)
 
     // Validate required fields
     if (!body.title || !body.slug || !body.content || !body.excerpt || !body.author) {
@@ -65,7 +65,8 @@ export default defineEventHandler(async (event) => {
         slug: body.slug,
         content: body.content,
         excerpt: body.excerpt,
-        author: body.author
+        author: body.author,
+        category: body.category || 'Geral'
       }
     })
 

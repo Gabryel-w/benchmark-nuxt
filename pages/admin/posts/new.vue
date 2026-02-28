@@ -1,54 +1,34 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold mb-8 text-gray-900">Create New Post</h1>
-
-    <AdminPostForm @submit="handleCreatePost" />
-
-    <NuxtLink
-      to="/admin/posts"
-      class="text-blue-600 hover:text-blue-800 mt-8 inline-block"
-    >
-      ← Back to posts
-    </NuxtLink>
+  <div class="w-full max-w-4xl mx-auto px-4 md:px-6 py-12">
+    <div class="mb-8">
+      <a
+        href="/admin/posts"
+        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Voltar para artigos
+      </a>
+      <h1 class="text-4xl font-bold text-gray-900">Criar Novo Artigo</h1>
+      <p class="text-gray-600 mt-2">Preencha os campos abaixo para publicar um novo artigo no PulseNews</p>
+    </div>
+    <AdminPostForm />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { CreatePostRequest } from '~/types'
-
 definePageMeta({
-  layout: 'default',
-  middleware: 'admin-auth'
+  layout: 'default'
 })
 
 useHead({
-  title: 'Create Post - Admin - DevBlog'
-})
-
-const router = useRouter()
-const isSubmitting = ref(false)
-const errorMessage = ref('')
-
-const handleCreatePost = async (formData: CreatePostRequest) => {
-  isSubmitting.value = true
-  errorMessage.value = ''
-
-  try {
-    const { error } = await useFetch('/api/posts', {
-      method: 'POST',
-      body: formData
-    })
-
-    if (error.value) {
-      errorMessage.value = 'Failed to create post'
-      return
+  title: 'Novo Artigo - Admin - PulseNews',
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
     }
-
-    await router.push('/admin/posts')
-  } catch (err) {
-    errorMessage.value = 'An error occurred while creating the post'
-  } finally {
-    isSubmitting.value = false
-  }
-}
+  ]
+})
 </script>

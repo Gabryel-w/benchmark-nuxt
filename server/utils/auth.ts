@@ -25,8 +25,16 @@ export function getTokenFromCookie(event: H3Event): string | null {
 }
 
 export function setTokenCookie(event: H3Event, token: string): void {
+  // httpOnly JWT cookie (for API route verification)
   setCookie(event, 'auth-token', token, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60
+  })
+  // Non-httpOnly flag cookie (readable by client-side middleware)
+  setCookie(event, 'auth-logged-in', '1', {
+    httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 7 * 24 * 60 * 60
@@ -35,4 +43,5 @@ export function setTokenCookie(event: H3Event, token: string): void {
 
 export function clearTokenCookie(event: H3Event): void {
   deleteCookie(event, 'auth-token')
+  deleteCookie(event, 'auth-logged-in')
 }

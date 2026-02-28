@@ -8,16 +8,35 @@ export default defineEventHandler(async (event): Promise<PostsListResponse> => {
     const query = getQuery(event)
     const page = parseInt(query.page as string) || 1
     const perPage = parseInt(query.perPage as string) || 10
+    const searchQuery = query.q as string
+    const category = query.category as string
 
     const skip = (page - 1) * perPage
 
+    // Build where clause for filtering
+    const where: any = {}
+
+    if (searchQuery) {
+      where.OR = [
+        { title: { contains: searchQuery, mode: 'insensitive' } },
+        { excerpt: { contains: searchQuery, mode: 'insensitive' } },
+        { content: { contains: searchQuery, mode: 'insensitive' } },
+        { author: { contains: searchQuery, mode: 'insensitive' } }
+      ]
+    }
+
+    if (category) {
+      where.category = category
+    }
+
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
+        where,
         skip,
         take: perPage,
         orderBy: { published_at: 'desc' }
       }),
-      prisma.post.count()
+      prisma.post.count({ where })
     ])
 
     return {

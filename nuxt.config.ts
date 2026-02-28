@@ -2,14 +2,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/google-fonts',
     '@nuxt/image'
   ],
-  googleFonts: {
-    families: {
-      Inter: [400, 500, 600, 700]
-    }
-  },
   routeRules: {
     '/': { prerender: true },
     '/posts/**': { swr: 60 },
@@ -21,9 +15,15 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'DevBlog - Nuxt',
+      title: 'PulseNews - Fique por dentro do que importa',
+      htmlAttrs: { lang: 'pt-BR' },
       meta: [
-        { name: 'description', content: 'A benchmark blog built with Nuxt' }
+        { name: 'description', content: 'Acompanhe as principais notícias sobre tecnologia, economia, saúde, ciência, esportes, cultura, política e meio ambiente.' }
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' }
       ]
     }
   },

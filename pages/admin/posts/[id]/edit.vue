@@ -1,75 +1,69 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold mb-8 text-gray-900">Edit Post</h1>
-
-    <div v-if="pending" class="text-center py-12">
-      <p class="text-gray-600">Loading post...</p>
+  <div class="w-full max-w-4xl mx-auto px-4 md:px-6 py-12">
+    <div v-if="pending" class="text-center py-16">
+      <div class="inline-block">
+        <div class="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      </div>
+      <p class="mt-2 text-gray-600">Carregando artigo...</p>
     </div>
 
-    <div v-else-if="error || !post" class="text-center py-12">
-      <p class="text-red-600">Post not found</p>
-      <NuxtLink to="/admin/posts" class="text-blue-600 hover:text-blue-800 mt-4 inline-block">
-        Back to posts
-      </NuxtLink>
+    <div v-else-if="error || !post" class="text-center py-16">
+      <a
+        href="/admin/posts"
+        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-8 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Voltar para artigos
+      </a>
+      <div class="bg-red-50 rounded-lg border border-red-100 p-6">
+        <p class="text-red-600 text-lg">Artigo não encontrado</p>
+      </div>
     </div>
 
     <div v-else>
-      <AdminPostForm :post="post" @submit="handleUpdatePost" />
-
-      <NuxtLink
-        to="/admin/posts"
-        class="text-blue-600 hover:text-blue-800 mt-8 inline-block"
-      >
-        ← Back to posts
-      </NuxtLink>
+      <div class="mb-8">
+        <a
+          href="/admin/posts"
+          class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Voltar para artigos
+        </a>
+        <h1 class="text-4xl font-bold text-gray-900">Editar Artigo</h1>
+        <p class="text-gray-600 mt-2">Atualize os dados do artigo "{{ post.title }}"</p>
+      </div>
+      <AdminPostForm :initial-post="post" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { SinglePostResponse, UpdatePostRequest } from '~/types'
+import type { Post } from '~/types'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'admin-auth'
+  layout: 'default'
 })
 
 const route = useRoute()
 const postId = route.params.id as string
 
 useHead({
-  title: 'Edit Post - Admin - DevBlog'
+  title: () => post.value ? `Editar "${post.value.title}" - Admin - PulseNews` : 'Editar Artigo - Admin - PulseNews',
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    }
+  ]
 })
 
-const router = useRouter()
-
-// Fetch all posts to find by ID
-const { data: postsData, pending, error } = useFetch(
-  '/api/posts?perPage=100'
+const { data, pending, error } = useFetch<{ post: Post }>(
+  () => `/api/posts/${postId}`
 )
 
-const post = computed(() => {
-  const posts = (postsData.value as any)?.posts || []
-  return posts.find((p: any) => p.id === parseInt(postId))
-})
-
-const handleUpdatePost = async (formData: UpdatePostRequest) => {
-  if (!post.value) return
-
-  try {
-    const { error: updateError } = await useFetch(`/api/posts/${post.value.slug}`, {
-      method: 'PUT',
-      body: formData
-    })
-
-    if (updateError.value) {
-      alert('Failed to update post')
-      return
-    }
-
-    await router.push('/admin/posts')
-  } catch (err) {
-    alert('An error occurred while updating the post')
-  }
-}
+const post = computed(() => data.value?.post)
 </script>
