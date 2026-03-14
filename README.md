@@ -1,173 +1,259 @@
-# DevBlog - Nuxt 3
+<p align="center">
+  <img src="https://img.shields.io/badge/Nuxt-3-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white" alt="Nuxt 3" />
+  <img src="https://img.shields.io/badge/Vue-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white" alt="Vue 3" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+</p>
 
-A high-performance blog application built with Nuxt 3, designed as part of a TCC thesis comparing Next.js and Nuxt performance.
+# DevBlog — Nuxt 3
 
-## Features
+Portal de noticias e artigos construido com **Nuxt 3**, parte de um trabalho de conclusao de curso (TCC) que compara o desempenho entre **Next.js** e **Nuxt** em aplicacoes web equivalentes.
 
-- Server-Side Rendering (SSR) for admin pages
-- Static Site Generation (SSG) for homepage
-- Incremental Static Regeneration (ISR) for blog posts
-- JWT-based authentication
-- Prisma ORM with PostgreSQL
-- TypeScript support
-- Tailwind CSS styling
-- Markdown content support
-- Comment system
-- Admin panel for post management
+> Este repositorio contem a implementacao Nuxt. A versao Next.js esta disponivel em [`benchmark-next`](../benchmark-next/).
+
+---
+
+## Visao Geral
+
+O DevBlog e uma aplicacao full-stack de blog que consome noticias em tempo real via **RSS feeds** de portais brasileiros (G1, GE) e permite gerenciamento de conteudo proprio atraves de um painel administrativo protegido por autenticacao JWT.
+
+### Principais Funcionalidades
+
+- **Feed de noticias em tempo real** — Consome RSS de 8 categorias (Tecnologia, Economia, Saude, Ciencia, Esportes, Cultura, Politica, Meio Ambiente)
+- **Cache inteligente** — Cache em memoria com TTL de 5 minutos para os feeds RSS
+- **Merge RSS + Banco** — Posts do banco de dados tem prioridade sobre posts RSS com mesmo slug
+- **Sistema de comentarios** — 500 comentarios pre-gerados distribuidos deterministicamente (50 por post) usando algoritmo baseado em hash
+- **Painel administrativo** — CRUD completo de artigos com autenticacao JWT
+- **Busca e filtragem** — Pesquisa por titulo/autor/conteudo e filtro por categoria
+- **Paginacao numerada** — Navegacao por paginas com indicadores de pagina atual
+- **SEO otimizado** — Meta tags dinamicas com useHead para cada artigo
+- **Design responsivo** — Interface profissional com Tailwind CSS
+
+---
 
 ## Tech Stack
 
-- **Framework**: Nuxt 3
-- **Language**: TypeScript
-- **Database**: PostgreSQL with Prisma ORM
-- **Styling**: Tailwind CSS
-- **Authentication**: JWT (jsonwebtoken)
-- **Password Hashing**: bcryptjs
+| Camada | Tecnologia |
+|--------|-----------|
+| Framework | Nuxt 3 (Nitro server engine) |
+| Linguagem | TypeScript 5 |
+| UI | Vue 3 (Composition API) + Tailwind CSS 3 |
+| Banco de Dados | PostgreSQL + Prisma ORM 5 |
+| Autenticacao | JWT (jsonwebtoken) + bcryptjs |
+| RSS | rss-parser |
+| Markdown | marked |
+| Fonte | Inter (Google Fonts) |
+| Imagens | @nuxt/image |
 
-## Prerequisites
+---
+
+## Inicio Rapido
+
+### Pre-requisitos
 
 - Node.js 18+
-- PostgreSQL database
-- npm or yarn package manager
+- PostgreSQL em execucao
+- npm
 
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd benchmark-nuxt
-```
-
-2. Install dependencies:
+### 1. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
+### 2. Configurar variaveis de ambiente
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your database credentials and JWT secret:
+Edite `.env.local`:
 
-```
-DATABASE_URL="postgresql://user:password@localhost:5432/benchmark_blog"
-JWT_SECRET="your-secret-key-here"
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/devblog_nuxt"
+JWT_SECRET="sua-chave-secreta"
 ```
 
-4. Run database migrations and seed:
+### 3. Configurar banco de dados
 
 ```bash
-npx prisma migrate dev
+npx prisma migrate dev --name init
 npm run seed
 ```
 
-## Development
+A seed cria:
+- 1 usuario administrador (`admin@devblog.com` / `admin123`)
+- 1 post oculto (pool de comentarios)
+- 500 comentarios distribuidos entre 40 autores ficticios
 
-Start the development server:
+### 4. Iniciar servidor de desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+Acesse [http://localhost:3000](http://localhost:3000)
 
-### Admin Login
+---
 
-Default credentials:
-- Email: `admin@devblog.com`
-- Password: `admin123`
+## Estrutura do Projeto
 
-## Building for Production
+```
+benchmark-nuxt/
+├── pages/
+│   ├── index.vue                   # Home — listagem de posts (SSG)
+│   ├── posts/
+│   │   └── [slug].vue              # Pagina do artigo (ISR 60s)
+│   └── admin/
+│       ├── login.vue               # Login administrativo (SSR)
+│       └── posts/
+│           ├── index.vue           # Listagem admin (SSR)
+│           ├── new.vue             # Criar artigo (SSR)
+│           └── [id]/edit.vue       # Editar artigo (SSR)
+├── server/
+│   ├── api/
+│   │   ├── posts/
+│   │   │   ├── index.get.ts        # GET lista (RSS + DB)
+│   │   │   ├── index.post.ts       # POST criar artigo
+│   │   │   └── [slug]/
+│   │   │       ├── index.get.ts    # GET post individual
+│   │   │       ├── index.put.ts    # PUT atualizar
+│   │   │       ├── index.delete.ts # DELETE excluir
+│   │   │       └── comments.get.ts # GET comentarios
+│   │   ├── admin/posts/
+│   │   │   └── index.get.ts        # GET posts admin (so DB)
+│   │   └── auth/
+│   │       ├── login.post.ts       # POST login
+│   │       ├── logout.post.ts      # POST logout
+│   │       └── me.get.ts           # GET sessao
+│   └── utils/
+│       ├── rss.ts                  # Parser RSS + cache + merge
+│       ├── prisma.ts               # Cliente Prisma
+│       └── auth.ts                 # Utilitarios JWT
+├── components/
+│   ├── PostCard.vue                # Card de preview com imagem
+│   ├── PostList.vue                # Grid de cards
+│   ├── PostContent.vue             # Renderizador de conteudo
+│   ├── CommentList.vue             # Lista de comentarios
+│   ├── CommentItem.vue             # Item de comentario
+│   ├── Header.vue                  # Cabecalho com glass effect
+│   ├── Footer.vue                  # Rodape
+│   ├── Pagination.vue              # Paginacao numerada
+│   ├── SearchBar.vue               # Barra de busca + filtro
+│   ├── AdminPostForm.vue           # Formulario de artigo
+│   └── AdminPostsList.vue          # Tabela admin de artigos
+├── layouts/
+│   └── default.vue                 # Layout padrao (Header + Footer)
+├── middleware/
+│   └── admin-auth.global.ts        # Protecao de rotas admin
+├── lib/
+│   └── markdown.ts                 # Parser Markdown/HTML
+├── prisma/
+│   ├── schema.prisma               # Schema do banco
+│   └── seed.ts                     # Seed de dados
+├── types/
+│   └── index.ts                    # Interfaces TypeScript
+├── assets/css/
+│   └── main.css                    # Estilos globais + Tailwind
+├── tailwind.config.ts              # Configuracao Tailwind
+└── nuxt.config.ts                  # Configuracao Nuxt
+```
+
+---
+
+## Estrategias de Renderizacao
+
+| Pagina | Rota | Estrategia | Detalhes |
+|--------|------|-----------|----------|
+| Home | `/` | SSG | Prerender no build |
+| Artigo | `/posts/[slug]` | ISR (SWR) | Revalida a cada 60s |
+| Comentarios | `/posts/[slug]#comments` | CSR | useFetch client-side |
+| Admin — Login | `/admin/login` | SSR | Sem cache |
+| Admin — Listagem | `/admin/posts` | SSR | Fetch reativo |
+| Admin — Criar | `/admin/posts/new` | SSR | Protegido por middleware |
+| Admin — Editar | `/admin/posts/[id]/edit` | SSR | Protegido por middleware |
+
+---
+
+## Rotas de API
+
+| Metodo | Rota | Descricao | Auth |
+|--------|------|-----------|------|
+| `GET` | `/api/posts` | Lista posts (RSS + DB) paginados | Nao |
+| `GET` | `/api/posts/:slug` | Post individual | Nao |
+| `GET` | `/api/posts/:slug/comments` | 50 comentarios deterministicos | Nao |
+| `POST` | `/api/posts` | Criar artigo | Sim |
+| `PUT` | `/api/posts/:slug` | Atualizar artigo | Sim |
+| `DELETE` | `/api/posts/:slug` | Excluir artigo | Sim |
+| `GET` | `/api/admin/posts` | Lista posts admin (so DB) | Nao |
+| `POST` | `/api/auth/login` | Login admin | Nao |
+| `GET` | `/api/auth/me` | Verificar sessao | Sim |
+| `POST` | `/api/auth/logout` | Encerrar sessao | Nao |
+
+---
+
+## Sistema de Comentarios
+
+Os comentarios utilizam um sistema de **pool deterministico**:
+
+1. A seed cria 500 comentarios vinculados a um post oculto (`__comment-pool__`)
+2. Ao acessar qualquer post, o sistema seleciona 50 comentarios unicos baseado em um hash do slug
+3. O algoritmo `(hash + i * 7 + i * i) % total` garante que o mesmo post sempre exibe os mesmos comentarios
+4. O post pool e filtrado das listagens publicas e do painel admin
+
+---
+
+## RSS Feeds
+
+| Categoria | Fonte |
+|-----------|-------|
+| Tecnologia | G1 Tecnologia |
+| Economia | G1 Economia |
+| Saude | G1 Saude |
+| Ciencia | G1 Ciencia e Saude |
+| Esportes | GE (Globo Esporte) |
+| Cultura | G1 Pop & Arte |
+| Politica | G1 Politica |
+| Meio Ambiente | G1 Natureza |
+
+---
+
+## Design System
+
+- **Cor principal**: Indigo 600 (`#4F46E5`)
+- **Header**: Glass effect (`bg-white/80 backdrop-blur-md`)
+- **Cards**: `rounded-2xl` com imagem de capa e gradiente fallback
+- **Footer**: `bg-gray-950` com acentos indigo
+- **Fonte**: Inter (Google Fonts)
+- **Responsivo**: Mobile-first com breakpoints `md:` e `lg:`
+
+---
+
+## Build de Producao
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Project Structure
+---
 
-```
-benchmark-nuxt/
-├── pages/              # Route pages and layouts
-├── components/         # Reusable Vue components
-├── composables/        # Composition API utilities
-├── server/             # Server-side API routes
-├── prisma/             # Database schema and migrations
-├── types/              # TypeScript type definitions
-├── utils/              # Utility functions
-├── assets/             # Static assets and CSS
-└── middleware/         # Route middleware
-```
+## Contexto do Projeto
 
-## API Endpoints
+Este repositorio faz parte de um **Trabalho de Conclusao de Curso (TCC)** que realiza uma analise comparativa de desempenho entre Next.js 14 e Nuxt 3. Ambas as aplicacoes sao **funcionalmente e visualmente equivalentes**, permitindo uma comparacao justa de metricas como:
 
-### Public Routes
+- Tempo de carregamento inicial (FCP, LCP)
+- Time to Interactive (TTI)
+- Tamanho do bundle
+- Tempo de build
+- Performance em Core Web Vitals
 
-- `GET /api/posts` - List published posts (with pagination)
-- `GET /api/posts/:slug` - Get single post by slug
-- `GET /api/posts/:slug/comments` - Get comments for a post
+O contrato de equivalencia entre os dois repositorios esta documentado em [`equivalencia.md`](./equivalencia.md).
 
-### Admin Routes (Requires Authentication)
+---
 
-- `POST /api/posts` - Create new post
-- `PUT /api/posts/:id` - Update existing post
-- `DELETE /api/posts/:id` - Delete post
-
-### Authentication
-
-- `POST /api/auth/login` - Admin login
-
-## Database Schema
-
-### Post
-- `id`: Unique identifier
-- `title`: Post title (max 100 chars)
-- `slug`: URL-friendly identifier (unique)
-- `content`: Markdown content
-- `excerpt`: Brief description (max 200 chars)
-- `author`: Post author name
-- `published_at`: Publication date
-- `updated_at`: Last update date
-
-### Comment
-- `id`: Unique identifier
-- `post_id`: Associated post
-- `author_name`: Comment author
-- `content`: Comment text (max 500 chars)
-- `created_at`: Creation date
-
-### AdminUser
-- `id`: Unique identifier
-- `email`: Admin email (unique)
-- `password_hash`: Hashed password
-
-## Rendering Strategies
-
-- **Home (`/`)**: Prerendered at build time (SSG)
-- **Posts (`/posts/[slug]`)**: Prerendered with ISR (60 second revalidation)
-- **Admin routes**: Server-side rendered (SSR)
-- **Comments**: Client-side fetched with `useFetch`
-
-## Performance Features
-
-- Image optimization with `@nuxt/image`
-- Font optimization with Google Fonts
-- Route-based code splitting
-- Lazy component loading
-- ISR for blog posts (60 second intervals)
-
-## Authentication Flow
-
-1. User logs in with email and password
-2. Server validates credentials against hashed password
-3. JWT token is generated and set in `auth-token` cookie
-4. Token is verified for protected API routes
-5. Client-side middleware protects admin routes
-
-## License
+## Licenca
 
 MIT
