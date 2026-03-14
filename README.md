@@ -11,7 +11,7 @@
 
 Portal de noticias e artigos construido com **Nuxt 3**, parte de um trabalho de conclusao de curso (TCC) que compara o desempenho entre **Next.js** e **Nuxt** em aplicacoes web equivalentes.
 
-> Este repositorio contem a implementacao Nuxt. A versao Next.js esta disponivel em [`benchmark-next`](../benchmark-next/).
+> Este repositorio contem a implementacao Nuxt. A versao Next.js esta disponivel em [`benchmark-next`](https://github.com/Gabryel-w/benchmark-next).
 
 ---
 
