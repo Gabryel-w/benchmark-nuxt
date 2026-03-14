@@ -195,14 +195,10 @@ const handleSubmit = async () => {
       : '/api/posts'
     const method = props.initialPost ? 'PUT' : 'POST'
 
-    const { error: fetchError } = await useFetch(url, {
+    await $fetch(url, {
       method,
       body: formData
     })
-
-    if (fetchError.value) {
-      throw new Error('Falha ao salvar post')
-    }
 
     router.push('/admin/posts')
   } catch (err) {
