@@ -28,9 +28,5 @@ export default defineNuxtConfig({
     }
   },
   css: ['~/assets/css/main.css'],
-  nitro: {
-    prerender: {
-      routes: ['/sitemap.xml', '/rss.xml']
-    }
-  }
+  nitro: {}
 })
