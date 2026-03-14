@@ -50,7 +50,7 @@
                 {{ post.title }}
               </td>
               <td class="px-6 py-4 text-sm">
-                <span class="inline-block px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                <span class="inline-block px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-medium">
                   {{ post.category }}
                 </span>
               </td>
@@ -63,7 +63,7 @@
               <td class="px-6 py-4 text-sm flex gap-3">
                 <a
                   :href="`/admin/posts/${post.id}/edit`"
-                  class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                  class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -87,12 +87,12 @@
       </div>
     </div>
 
-    <div v-if="totalPages > 1" class="mt-8 flex items-center justify-between gap-4 bg-gray-50 p-6 rounded-lg border border-gray-100">
+    <div v-if="totalPages > 1" class="mt-8 flex items-center justify-between gap-4 bg-gray-50 p-6 rounded-xl border border-gray-100">
       <div>
         <NuxtLink
           v-if="currentPage > 1"
           :to="{ query: { page: currentPage - 1 } }"
-          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -102,7 +102,7 @@
         <button
           v-else
           disabled
-          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed font-medium opacity-60"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed font-medium opacity-60"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -119,7 +119,7 @@
         <NuxtLink
           v-if="currentPage < totalPages"
           :to="{ query: { page: currentPage + 1 } }"
-          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium"
         >
           Próxima
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@
         <button
           v-else
           disabled
-          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed font-medium opacity-60"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed font-medium opacity-60"
         >
           Próxima
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

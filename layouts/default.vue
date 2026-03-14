@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col min-h-screen bg-white">
     <Header />
-    <main class="flex-grow">
+    <main class="flex-1 w-full">
       <slot />
     </main>
     <Footer />

@@ -1,7 +1,7 @@
 <template>
   <div v-if="pending" class="text-gray-500 text-center py-12">
     <div class="inline-block">
-      <div class="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <div class="w-8 h-8 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin"></div>
     </div>
     <p class="mt-2">Carregando comentários...</p>
   </div>

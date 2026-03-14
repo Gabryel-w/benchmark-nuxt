@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+  <header class="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/60">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-4">
       <nav class="flex items-center justify-between">
         <!-- Logo -->
@@ -7,17 +7,14 @@
           to="/"
           class="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <div class="flex items-center gap-2">
-            <span class="text-2xl font-bold text-gray-900">PulseNews</span>
-            <div class="w-2 h-2 bg-blue-600 rounded-full pulse-dot"></div>
-          </div>
+          <span class="text-2xl font-bold tracking-tight text-gray-900">DevBlog<span class="text-indigo-600">.</span></span>
         </NuxtLink>
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex gap-8 items-center">
           <NuxtLink
             to="/"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
           >
             Início
           </NuxtLink>
@@ -26,7 +23,7 @@
           <div v-if="isAdmin" class="relative" ref="dropdownRef">
             <button
               @click="dropdownOpen = !dropdownOpen"
-              class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+              class="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors"
               title="Menu do Admin"
             >
               A
@@ -56,7 +53,7 @@
           <NuxtLink
             v-else
             to="/admin/login"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
           >
             Entrar
           </NuxtLink>
@@ -89,11 +86,11 @@
       <!-- Mobile Navigation -->
       <div
         v-if="mobileMenuOpen"
-        class="md:hidden mt-4 pt-4 border-t border-gray-100 flex flex-col gap-4"
+        class="md:hidden mt-4 pt-4 border-t border-gray-200/60 flex flex-col gap-4"
       >
         <NuxtLink
           to="/"
-          class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+          class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
           @click="mobileMenuOpen = false"
         >
           Início
@@ -102,14 +99,14 @@
         <template v-if="isAdmin">
           <NuxtLink
             to="/admin/posts"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
             @click="mobileMenuOpen = false"
           >
             Painel Admin
           </NuxtLink>
           <button
             @click="handleLogoutMobile"
-            class="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            class="text-left text-gray-600 hover:text-gray-900 font-medium transition-colors"
           >
             Sair
           </button>
@@ -118,7 +115,7 @@
         <NuxtLink
           v-else
           to="/admin/login"
-          class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+          class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
           @click="mobileMenuOpen = false"
         >
           Entrar

@@ -13,7 +13,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Procure por títulos, autores ou conteúdo..."
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               @keyup.enter="handleSearch"
             />
             <svg
@@ -40,8 +40,7 @@
           <select
             id="category"
             v-model="selectedCategory"
-            class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-            @change="handleSearch"
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
           >
             <option value="">Todas as categorias</option>
             <option value="Tecnologia">Tecnologia</option>
@@ -58,7 +57,7 @@
         <!-- Search Button -->
         <button
           @click="handleSearch"
-          class="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium"
         >
           Pesquisar
         </button>
@@ -73,7 +72,7 @@
           :class="[
             'px-4 py-2 rounded-full text-sm font-medium transition-colors',
             selectedCategory === cat
-              ? 'bg-blue-600 text-white'
+              ? 'bg-indigo-600 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           ]"
         >

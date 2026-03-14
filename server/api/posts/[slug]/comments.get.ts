@@ -1,6 +1,16 @@
 import { getPrismaClient } from '~/server/utils/prisma'
 import type { CommentsListResponse } from '~/types'
 
+function hashCode(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return Math.abs(hash)
+}
+
 export default defineEventHandler(async (event): Promise<CommentsListResponse> => {
   const prisma = getPrismaClient()
 
@@ -14,25 +24,36 @@ export default defineEventHandler(async (event): Promise<CommentsListResponse> =
       })
     }
 
-    // Get post by slug
-    const post = await prisma.post.findUnique({
-      where: { slug }
+    // Fetch all pool comments
+    const allComments = await prisma.comment.findMany({
+      orderBy: { id: 'asc' },
     })
 
-    if (!post) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Post not found'
-      })
+    if (allComments.length === 0) {
+      return { comments: [] }
     }
 
-    // Get comments for the post
-    const comments = await prisma.comment.findMany({
-      where: { post_id: post.id },
-      orderBy: { created_at: 'desc' }
-    })
+    // Select 50 deterministic comments based on slug hash
+    const hash = hashCode(slug)
+    const count = Math.min(50, allComments.length)
+    const selected = []
+    const used = new Set<number>()
 
-    return { comments }
+    for (let i = 0; i < count; i++) {
+      let index = (hash + i * 7 + i * i) % allComments.length
+      while (used.has(index)) {
+        index = (index + 1) % allComments.length
+      }
+      used.add(index)
+      selected.push(allComments[index])
+    }
+
+    // Sort by created_at desc
+    selected.sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+
+    return { comments: selected }
   } catch (error) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

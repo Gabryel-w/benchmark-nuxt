@@ -18,7 +18,7 @@
           type="text"
           id="title"
           v-model="formData.title"
-          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
           required
           :disabled="isLoading"
           placeholder="Digite o título do artigo"
@@ -32,7 +32,7 @@
         <select
           id="category"
           v-model="formData.category"
-          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
           required
           :disabled="isLoading"
         >
@@ -52,7 +52,7 @@
         type="text"
         id="slug"
         v-model="formData.slug"
-        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all font-mono text-sm"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono text-sm"
         required
         :disabled="isLoading"
         placeholder="titulo-do-artigo"
@@ -69,7 +69,7 @@
         type="text"
         id="excerpt"
         v-model="formData.excerpt"
-        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
         maxlength="200"
         required
         :disabled="isLoading"
@@ -87,7 +87,7 @@
         type="text"
         id="author"
         v-model="formData.author"
-        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
         required
         :disabled="isLoading"
         placeholder="Nome do autor"
@@ -103,7 +103,7 @@
         id="content"
         v-model="formData.content"
         rows="16"
-        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all font-mono text-sm"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono text-sm"
         required
         :disabled="isLoading"
         placeholder="Escreva o conteúdo em Markdown..."
@@ -116,7 +116,7 @@
       <button
         type="submit"
         :disabled="isLoading"
-        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+        class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
       >
         {{ isLoading ? 'Salvando...' : initialPost ? 'Atualizar Artigo' : 'Criar Artigo' }}
       </button>

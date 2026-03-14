@@ -4,21 +4,21 @@
     <article class="w-full max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
       <div v-if="pending" class="text-center py-16">
         <div class="inline-block">
-          <div class="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <div class="w-8 h-8 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin"></div>
         </div>
         <p class="mt-2 text-gray-600">Carregando artigo...</p>
       </div>
 
       <div v-else-if="error || !post">
-        <NuxtLink
-          to="/"
-          class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-8 transition-colors"
+        <button
+          @click="$router.back()"
+          class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
           Voltar para início
-        </NuxtLink>
+        </button>
         <div class="text-center py-16 bg-red-50 rounded-lg border border-red-100">
           <p class="text-red-600 text-lg">Artigo não encontrado</p>
         </div>
@@ -26,19 +26,28 @@
 
       <template v-else>
         <!-- Navigation -->
-        <NuxtLink
-          to="/"
-          class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-8 transition-colors"
+        <button
+          @click="$router.back()"
+          class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
           Voltar para início
-        </NuxtLink>
+        </button>
+
+        <!-- Cover Image -->
+        <div v-if="post.image" class="mb-8 rounded-2xl overflow-hidden">
+          <img
+            :src="post.image"
+            :alt="post.title"
+            class="w-full h-64 md:h-96 object-cover"
+          />
+        </div>
 
         <!-- Category Badge -->
         <div class="mb-6">
-          <span :class="[categoryColor.bg, categoryColor.text, 'inline-block px-3 py-1 rounded-full text-sm font-medium']">
+          <span :class="[categoryColor.bg, categoryColor.text, 'inline-block px-3 py-1 rounded-full text-xs font-semibold']">
             {{ post.category }}
           </span>
         </div>
@@ -76,10 +85,8 @@
           <PostContent :content="post.content" />
         </div>
 
-        <!-- Divider -->
-        <div class="border-t border-gray-200 my-12"></div>
-
         <!-- Comments Section -->
+        <div class="border-t border-gray-200 my-12"></div>
         <section class="mt-12">
           <CommentList :post-slug="slug" />
         </section>
@@ -105,7 +112,7 @@ const { data, pending, error } = useFetch<{ post: Post }>(
 const post = computed(() => data.value?.post)
 
 useHead({
-  title: () => post.value ? `${post.value.title} - PulseNews` : 'PulseNews',
+  title: () => post.value ? `${post.value.title} - DevBlog` : 'DevBlog',
   meta: () => post.value ? [
     {
       name: 'description',
@@ -117,14 +124,14 @@ useHead({
 // Category color function
 const getCategoryColor = (category: string): { bg: string; text: string } => {
   const colors: Record<string, { bg: string; text: string }> = {
-    'Tecnologia': { bg: 'bg-blue-100', text: 'text-blue-700' },
-    'Economia': { bg: 'bg-green-100', text: 'text-green-700' },
-    'Saúde': { bg: 'bg-red-100', text: 'text-red-700' },
-    'Ciência': { bg: 'bg-purple-100', text: 'text-purple-700' },
-    'Esportes': { bg: 'bg-orange-100', text: 'text-orange-700' },
-    'Cultura': { bg: 'bg-pink-100', text: 'text-pink-700' },
-    'Política': { bg: 'bg-yellow-100', text: 'text-yellow-700' },
-    'Meio Ambiente': { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    'Tecnologia': { bg: 'bg-blue-50', text: 'text-blue-600' },
+    'Economia': { bg: 'bg-emerald-50', text: 'text-emerald-600' },
+    'Saúde': { bg: 'bg-rose-50', text: 'text-rose-600' },
+    'Ciência': { bg: 'bg-violet-50', text: 'text-violet-600' },
+    'Esportes': { bg: 'bg-amber-50', text: 'text-amber-600' },
+    'Cultura': { bg: 'bg-pink-50', text: 'text-pink-600' },
+    'Política': { bg: 'bg-sky-50', text: 'text-sky-600' },
+    'Meio Ambiente': { bg: 'bg-teal-50', text: 'text-teal-600' },
   }
   return colors[category] || { bg: 'bg-gray-100', text: 'text-gray-700' }
 }

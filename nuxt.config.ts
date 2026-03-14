@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'PulseNews - Fique por dentro do que importa',
+      title: 'DevBlog - Seu portal de notícias e artigos',
       htmlAttrs: { lang: 'pt-BR' },
       meta: [
         { name: 'description', content: 'Acompanhe as principais notícias sobre tecnologia, economia, saúde, ciência, esportes, cultura, política e meio ambiente.' }

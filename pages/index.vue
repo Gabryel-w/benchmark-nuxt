@@ -1,16 +1,16 @@
 <template>
   <div class="w-full">
     <!-- Hero Section -->
-    <div v-if="currentPage === 1 && !searchQuery && !categoryQuery" class="bg-gradient-to-br from-gray-50 to-white border-b border-gray-100 py-16 md:py-20">
+    <div v-if="currentPage === 1 && !searchQuery && !categoryQuery" class="bg-gray-50 border-b border-gray-100 py-20 md:py-28">
       <div class="max-w-7xl mx-auto px-4 md:px-6">
         <div class="max-w-3xl">
-          <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">
-            PulseNews
+          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-4 leading-tight">
+            DevBlog<span class="text-indigo-600">.</span>
           </h1>
-          <p class="text-xl md:text-2xl text-gray-600 mb-2 font-medium">
-            Fique por dentro do que importa
+          <p class="text-xl md:text-2xl text-gray-500 font-normal max-w-2xl mb-2">
+            Seu portal de notícias e artigos
           </p>
-          <p class="text-lg text-gray-500">
+          <p class="text-base text-gray-400">
             As principais notícias sobre tecnologia, economia, saúde, ciência, esportes, cultura, política e meio ambiente, tudo em um só lugar.
           </p>
         </div>
@@ -24,7 +24,7 @@
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
       <div v-if="pending" class="text-center py-16">
         <div class="inline-block">
-          <div class="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <div class="w-8 h-8 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin"></div>
         </div>
         <p class="mt-2 text-gray-600">Carregando artigos...</p>
       </div>
@@ -39,7 +39,7 @@
           <Pagination
             :current="currentPage"
             :total="totalPages"
-            :per-page="postsPerPage"
+            :total-count="totalCount"
           />
         </div>
       </div>
@@ -62,7 +62,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'PulseNews - Fique por dentro do que importa',
+  title: 'DevBlog - Seu portal de notícias e artigos',
   meta: [
     {
       name: 'description',
@@ -107,8 +107,6 @@ const { data, pending, error, refresh } = useFetch<PostsListResponse>(
 )
 
 const posts = computed(() => data.value?.posts || [])
-const totalPages = computed(() => {
-  const total = data.value?.total || 0
-  return Math.ceil(total / postsPerPage)
-})
+const totalCount = computed(() => data.value?.total || 0)
+const totalPages = computed(() => Math.ceil(totalCount.value / postsPerPage))
 </script>

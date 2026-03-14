@@ -7,7 +7,7 @@
       </div>
       <NuxtLink
         to="/admin/posts/new"
-        class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+        class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -18,7 +18,7 @@
 
     <div v-if="pending" class="text-center py-16">
       <div class="inline-block">
-        <div class="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <div class="w-8 h-8 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
       <p class="mt-2 text-gray-600">Carregando artigos...</p>
     </div>
@@ -44,7 +44,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Gerenciar Artigos - Admin - PulseNews',
+  title: 'Gerenciar Artigos - Admin - DevBlog',
   meta: [
     {
       name: 'robots',
@@ -62,7 +62,7 @@ const currentPage = computed(() => {
 })
 
 const { data, pending, error } = useFetch<PostsListResponse>(
-  () => `/api/posts?page=${currentPage.value}&perPage=${postsPerPage}`,
+  () => `/api/admin/posts?page=${currentPage.value}&perPage=${postsPerPage}`,
   {
     watch: [currentPage]
   }

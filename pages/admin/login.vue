@@ -1,11 +1,10 @@
 <template>
   <div class="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
     <div class="w-full max-w-md">
-      <div class="bg-white rounded-xl shadow-xl p-8 border border-gray-100">
+      <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
         <div class="mb-8 text-center">
           <div class="inline-flex items-center gap-2 mb-4">
-            <span class="text-3xl font-bold text-gray-900">PulseNews</span>
-            <div class="w-2 h-2 bg-blue-600 rounded-full pulse-dot"></div>
+            <span class="text-3xl font-bold tracking-tight text-gray-900">DevBlog<span class="text-indigo-600">.</span></span>
           </div>
           <h1 class="text-2xl font-bold text-gray-900">
             Painel Administrativo
@@ -29,10 +28,10 @@
               id="email"
               v-model="formData.email"
               type="email"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               required
               :disabled="isLoading"
-              placeholder="admin@pulsesnews.com"
+              placeholder="admin@devblog.com"
             />
           </div>
 
@@ -44,7 +43,7 @@
               id="password"
               v-model="formData.password"
               type="password"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               required
               :disabled="isLoading"
               placeholder="Sua senha"
@@ -54,16 +53,11 @@
           <button
             type="submit"
             :disabled="isLoading"
-            class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 font-semibold disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-400 font-semibold disabled:cursor-not-allowed"
           >
             {{ isLoading ? 'Conectando...' : 'Entrar' }}
           </button>
 
-          <div class="text-xs text-gray-500 text-center bg-gray-50 p-4 rounded-lg border border-gray-100">
-            <p class="font-medium text-gray-700 mb-2">Credenciais de demonstração:</p>
-            <p>Email: <span class="font-mono text-blue-600">admin@pulsesnews.com</span></p>
-            <p>Senha: <span class="font-mono text-blue-600">admin123</span></p>
-          </div>
         </form>
       </div>
     </div>
@@ -76,7 +70,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Painel Admin - PulseNews',
+  title: 'Painel Admin - DevBlog',
   meta: [
     {
       name: 'robots',
